@@ -50,6 +50,18 @@ void copyToClipboard(const std::string &content)
 #endif
 }
 
+void help()
+{
+    std::cout << "2fakey usage:\n";
+    std::cout << "-a [name]        Add a new credential with the specified name.\n";
+    std::cout << "-n [name]        Generate a token for the specified name.\n";
+    std::cout << "-c               Copy the generated token to the clipboard.\n";
+    std::cout << "-l               List all stored credential names.\n";
+    std::cout << "-all             Generate tokens for all stored credentials.\n";
+    std::cout << "-h               Display this help message.\n";
+    std::cout << "When using without arguments, proceed with normal procedures.\n";
+}
+
 int main(int argc, char *argv[])
 {
     #ifdef _WIN32
@@ -76,7 +88,7 @@ int main(int argc, char *argv[])
             if (arguments[i].size() > 1 && arguments[i][0] == '-')
             {
                 // 如果是 -all -c, -l 选项，直接存储，不需要检查后面是否有参数
-                if (arguments[i] == "-all" || arguments[i] == "-c" || arguments[i] == "-l")
+                if (arguments[i] == "-all" || arguments[i] == "-c" || arguments[i] == "-l" || arguments[i] == "-h")
                 {
                     options[arguments[i]] = "";
                 }
@@ -100,6 +112,11 @@ int main(int argc, char *argv[])
             }
         }
         // 根据选项执行不同的操作
+        if(options.count("-h"))
+        {
+            help();
+            return 0;
+        }
         if (options.count("-all"))
         {
 
@@ -260,7 +277,8 @@ int main(int argc, char *argv[])
         }
     }
     else
-    {
+    {   
+        help();
         std::cout << "Please enter your token:";
         std::cin >> secret;
         std::cout << "Whether to save(yes/no)?";
